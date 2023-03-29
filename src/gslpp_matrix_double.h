@@ -69,6 +69,7 @@ namespace gslpp
       matrix<double>& operator=(const matrix<double>& m);
       matrix<double>& operator=(double a);
       void assign(const size_t& i, const size_t& j, const double& a);
+      void assign(const size_t& i, double array[]);
       void assign(const size_t& i, const size_t& j, const matrix<double>& a);
      /** Get matrix size */
       size_t size_i() const;

@@ -109,6 +109,14 @@ namespace gslpp {
     {
         gsl_matrix_set(_matrix, i, j, a);
     }
+    
+    void matrix<double>::assign(const size_t& i, double array[])
+    {
+        for (size_t j = 0; j < size_j(); j++)
+        {
+            gsl_matrix_set(_matrix, i, j, array[j]);
+        }
+    }
 
     /** Assign submatrix */
     void matrix<double>::assign(const size_t& i, const size_t& j, const matrix<double>& a)

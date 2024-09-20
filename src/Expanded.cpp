@@ -76,7 +76,7 @@ template <> Expanded<matrix<double> > Expanded<matrix<double> >::transpose() con
         for (int i2 = 0; i2 < n2.at(i1); i2++)
             res[i1][i2] = data[i1][i2].transpose();
     }
-    return Expanded<matrix<double>>(res, minord2, minord1);
+    return Expanded<matrix<double > >(res, minord2, minord1);
 }
 
 template <> Expanded<matrix<complex> > Expanded<matrix<complex> >::transpose() const
@@ -88,7 +88,7 @@ template <> Expanded<matrix<complex> > Expanded<matrix<complex> >::transpose() c
         for (int i2 = 0; i2 < n2.at(i1); i2++)
             res[i1][i2] = data[i1][i2].transpose();
     }
-    return Expanded<matrix < complex >> (res, minord2, minord1);
+    return Expanded<matrix < complex > > (res, minord2, minord1);
 }
 
 template <> Expanded<double> Expanded<complex>::real() const

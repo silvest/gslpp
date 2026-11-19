@@ -6,7 +6,9 @@
  */
 
 #include <stdlib.h>
+#include <cmath>
 #include <iostream>
+#include <stdexcept>
 #include <gslpp_complex.h>
 #include <gslpp_vector_double.h>
 #include <gslpp_vector_complex.h>
@@ -348,6 +350,75 @@ void test2() {
 //    std::cout << "%TEST_FAILED% time=0 testname=test2 (gslpptest) message=error message sample" << std::endl;
 }
 
+vector<double> checkComplexSvd(const matrix<complex>& input)
+{
+    const size_t size = input.size_i();
+    matrix<complex> U(size, size, 0.);
+    matrix<complex> V(size, size, 0.);
+    vector<double> S(size, 0.);
+    input.singularvalue(U, V, S);
+
+    const auto leftGram = U.hconjugate() * U;
+    const auto rightGram = V.hconjugate() * V;
+    const auto diagonal = U.hconjugate() * input * V;
+    const double tolerance = 1.e-13;
+    const double diagonalTolerance = tolerance * S(size - 1);
+    for (size_t i = 0; i < size; ++i) {
+        if (!std::isfinite(S(i)) || S(i) < 0. || (i > 0 && S(i - 1) > S(i)))
+            throw std::runtime_error("Singular values are not finite, nonnegative and sorted");
+        for (size_t j = 0; j < size; ++j) {
+            const double identityEntry = i == j ? 1. : 0.;
+            if (!((leftGram(i, j) - identityEntry).abs() <= tolerance)
+                    || !((rightGram(i, j) - identityEntry).abs() <= tolerance))
+                throw std::runtime_error("Singular vectors are not orthonormal");
+            const double diagonalEntry = i == j ? S(i) : 0.;
+            if (!((diagonal(i, j) - diagonalEntry).abs() <= diagonalTolerance))
+                throw std::runtime_error("Complex SVD does not reconstruct its input");
+        }
+    }
+    return S;
+}
+
+void testComplexSvd()
+{
+    matrix<complex> repeated(2, 2, 0.);
+    repeated.assign(0, 1, complex::i());
+    repeated.assign(1, 0, 1.);
+    const auto repeatedValues = checkComplexSvd(repeated);
+    if (std::abs(repeatedValues(0) - 1.) > 1.e-14 || std::abs(repeatedValues(1) - 1.) > 1.e-14)
+        throw std::runtime_error("Complex SVD lost repeated unit singular values");
+
+    const complex rows[] = {complex(1., 2.), complex(3., 4.), complex(-2., 1.)};
+    const complex columns[] = {complex(2., -1.), complex(1., 2.), complex(-1., 3.)};
+    matrix<complex> rankOne(3, 3, 0.);
+    for (size_t i = 0; i < 3; ++i)
+        for (size_t j = 0; j < 3; ++j)
+            rankOne.assign(i, j, rows[i] * columns[j]);
+    const auto rankOneValues = checkComplexSvd(rankOne);
+    if (rankOneValues(0) != 0. || rankOneValues(1) != 0.
+            || std::abs(rankOneValues(2) - std::sqrt(700.)) > 1.e-13)
+        throw std::runtime_error("Complex SVD mishandled a rank-one matrix");
+
+    const double tinyValue = 1.e-200;
+    matrix<complex> unequal(2, 2, 0.);
+    unequal.assign(0, 0, 1.);
+    unequal.assign(0, 1, tinyValue * complex::i());
+    unequal.assign(1, 1, tinyValue);
+    const auto unequalValues = checkComplexSvd(unequal);
+    if (std::abs(unequalValues(0) / tinyValue - 1.) > 1.e-13)
+        throw std::runtime_error("Complex SVD lost a small, independent singular value");
+
+    matrix<complex> nearlyParallel(2, 2, 0.);
+    nearlyParallel.assign(0, 0, complex(1., 1.));
+    nearlyParallel.assign(0, 1, complex(-1., 1.));
+    nearlyParallel.assign(1, 0, tinyValue);
+    const auto nearlyParallelValues = checkComplexSvd(nearlyParallel);
+    if (std::abs(nearlyParallelValues(0) / tinyValue - 1. / std::sqrt(2.)) > 1.e-13)
+        throw std::runtime_error("Complex SVD lost a small component from nearly parallel columns");
+
+    checkComplexSvd(matrix<complex>(3, 3, 0.));
+}
+
 int main(int argc, char** argv) {
     std::cout << "%SUITE_STARTING% gslpptest" << std::endl;
     std::cout << "%SUITE_STARTED%" << std::endl;
@@ -359,6 +430,10 @@ int main(int argc, char** argv) {
     std::cout << "%TEST_STARTED% test2 (gslpptest)\n" << std::endl;
     test2();
     std::cout << "%TEST_FINISHED% time=0 test2 (gslpptest)" << std::endl;
+
+    std::cout << "%TEST_STARTED% testComplexSvd (gslpptest)" << std::endl;
+    testComplexSvd();
+    std::cout << "%TEST_FINISHED% time=0 testComplexSvd (gslpptest)" << std::endl;
 
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 

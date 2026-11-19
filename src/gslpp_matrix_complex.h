@@ -110,10 +110,10 @@ namespace gslpp
        */
       void eigensystem(matrix<complex> &U, vector<double> &S) const;
       /**
-       * Singular Value Decomposition as U diagonalmatrix(S) V^+
+       * Singular value decomposition of a square matrix as U diag(S) V^+.
        * @param U matrix<complex>&
        * @param V matrix<complex>&
-       * @param S vector<double>&
+       * @param S vector<double>& nonnegative singular values in ascending order
        */
       void singularvalue(matrix<complex> &U, matrix<complex> &V, vector<double> &S) const;
       /** Conversion */

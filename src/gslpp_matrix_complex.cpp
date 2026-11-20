@@ -234,19 +234,10 @@ namespace gslpp {
     /** Hermitean conjugate matrix */
     matrix<complex> matrix<complex>::hconjugate() const
     {
-        matrix<complex> m1(*this);
-        gsl_complex z1, z2;
-
-        GSL_SET_COMPLEX(&z1, 1., 0.);
-        GSL_SET_COMPLEX(&z2, 0., 0.);
-
-        if (gsl_blas_zgemm(CblasConjTrans, CblasNoTrans, z1, _matrix,
-                Id(size_j()).as_gsl_type_ptr(), z2, m1.as_gsl_type_ptr()) != 0)
-        {
-            std::cout << "\n ** Error in matrix<complex> conjugate" << std::endl;
-            exit(EXIT_FAILURE);
-        }
-
+        matrix<complex> m1(size_j(), size_i(), 0.);
+        for (size_t i = 0; i < size_i(); ++i)
+            for (size_t j = 0; j < size_j(); ++j)
+                m1.assign(j, i, (*this)(i, j).conjugate());
         return m1;
     }
 
@@ -599,7 +590,7 @@ namespace gslpp {
     /** Multiplication operator (matrix complex) */
     matrix<complex> matrix<complex>::operator*(const matrix<complex>& m) const
     {
-        matrix<complex> m1(_matrix);
+        matrix<complex> m1(size_i(), m.size_j(), 0.);
         gsl_complex z1, z2;
 
         if (size_j() != m.size_i())

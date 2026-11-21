@@ -359,7 +359,7 @@ namespace gslpp {
     matrix<double> matrix<double>::operator*(const matrix<double>& m) const
     {
         unsigned int i, j, k;
-        matrix<double> m1(size_i(), m.size_i(), 0.);
+        matrix<double> m1(size_i(), m.size_j(), 0.);
 
         if (size_j() != m.size_i())
         {

@@ -21,7 +21,8 @@ static double gslFunctionAdapter( double x, void* p)
 }
 
 template<class F>
-gsl_function convertToGslFunction( const F& f )
+// The caller retains the callable until GSL finishes using the returned function.
+gsl_function convertToGslFunction( F& f )
 {
     gsl_function gslFunction;
     
@@ -34,6 +35,9 @@ gsl_function convertToGslFunction( const F& f )
     
     return gslFunction;
 }
+
+template<class F>
+gsl_function convertToGslFunction(const F&&) = delete;
 
 #endif /* GSLPP_FUNCTION_ADAPTER_H */
 

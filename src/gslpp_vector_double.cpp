@@ -5,6 +5,7 @@
  * For the licensing terms see doc/COPYING.
  */
 
+#include <stdexcept>
 #include <stdlib.h>
 #include <iostream>
 #ifndef __GSL_BLAS_H__
@@ -80,7 +81,8 @@ namespace gslpp
 
   vector<double>& vector<double>::operator=(const vector<double>& v)
   {
-    gsl_vector_memcpy(_vector, v.as_gsl_type_ptr());
+    if (size() != v.size()) throw std::invalid_argument("Vector assignment size mismatch");
+    if (this != &v) gsl_vector_memcpy(_vector, v.as_gsl_type_ptr());
     return *this;
   }
 

@@ -15,6 +15,7 @@
 #define EXPANDED_H
 
 #include <cmath>
+#include <limits>
 #include <vector>
 #include <iostream>
 #include <stdexcept>
@@ -88,8 +89,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<Q> > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<Q>(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -110,8 +114,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<T> > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<T>(up2, Zero()));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -130,8 +137,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<vector<complex> > > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<vector<complex> >(up2, Zero()));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -150,8 +160,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<vector<complex> > > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<vector<complex> >(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -171,8 +184,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<complex> > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<complex>(up2, 0.));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -190,8 +206,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<matrix<complex> > > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<matrix<complex> >(up2, Zero()));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -209,8 +228,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<matrix<complex> > > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<matrix<complex> >(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -228,8 +250,11 @@ public:
         int min2 = minord2 + z.getMin2();
         int up1 = std::min(n1, z.getN1());
         std::vector<std::vector<double> > res;
+        // keep only complete terms: (i1, i2) needs all orders j2 <= i2 at every outer order j1 <= i1 of both
+        // factors, so the inner range is the minimum of n2 over the lower outer orders (n2 may grow with i1)
+        int up2 = std::numeric_limits<int>::max();
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1), z.getN2().at(i1));
+            up2 = std::min(up2, std::min(n2.at(i1), z.getN2().at(i1)));
             res.push_back(std::vector<double>(up2, 0.));
             for (int i2 = 0; i2 < up2; i2++)
                 for (int j1 = 0; j1 <= i1; j1++)
@@ -250,7 +275,12 @@ public:
         int up1 = std::min(n1 + minord1, z.getN1() + z.getMin1()) - min1;
         std::vector<std::vector<T> > res;
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1) + minord2, z.getN2().at(i1) + z.getMin2()) - min2;
+            // the outer order i1 + min1 is at index i1 + min1 - minord1 in this expansion and i1 + min1 - z.getMin1()
+            // in z; an operand starting at a higher outer order is exactly zero here and does not limit the inner range
+            int up2 = std::numeric_limits<int>::max();
+            if (i1 + min1 >= minord1) up2 = std::min(up2, n2.at(i1 + min1 - minord1) + minord2);
+            if (i1 + min1 >= z.getMin1()) up2 = std::min(up2, z.getN2().at(i1 + min1 - z.getMin1()) + z.getMin2());
+            up2 -= min2;
             res.push_back(std::vector<T>(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++) {
                 if (i1 + min1 >= minord1 && i2 + min2 >= minord2) res[i1][i2] += data[i1 + min1 - minord1][i2 + min2 - minord2];
@@ -269,7 +299,12 @@ public:
         int up1 = std::min(n1 + minord1, z.getN1() + z.getMin1()) - min1;
         std::vector<std::vector<Q> > res;
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1) + minord2, z.getN2().at(i1) + z.getMin2()) - min2;
+            // the outer order i1 + min1 is at index i1 + min1 - minord1 in this expansion and i1 + min1 - z.getMin1()
+            // in z; an operand starting at a higher outer order is exactly zero here and does not limit the inner range
+            int up2 = std::numeric_limits<int>::max();
+            if (i1 + min1 >= minord1) up2 = std::min(up2, n2.at(i1 + min1 - minord1) + minord2);
+            if (i1 + min1 >= z.getMin1()) up2 = std::min(up2, z.getN2().at(i1 + min1 - z.getMin1()) + z.getMin2());
+            up2 -= min2;
             res.push_back(std::vector<Q>(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++) {
                 if (i1 + min1 >= minord1 && i2 + min2 >= minord2) res[i1][i2] += data[i1 + min1 - minord1][i2 + min2 - minord2];
@@ -290,7 +325,12 @@ public:
         int up1 = std::min(n1 + minord1, z.getN1() + z.getMin1()) - min1;
         std::vector<std::vector<T> > res;
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1) + minord2, z.getN2().at(i1) + z.getMin2()) - min2;
+            // the outer order i1 + min1 is at index i1 + min1 - minord1 in this expansion and i1 + min1 - z.getMin1()
+            // in z; an operand starting at a higher outer order is exactly zero here and does not limit the inner range
+            int up2 = std::numeric_limits<int>::max();
+            if (i1 + min1 >= minord1) up2 = std::min(up2, n2.at(i1 + min1 - minord1) + minord2);
+            if (i1 + min1 >= z.getMin1()) up2 = std::min(up2, z.getN2().at(i1 + min1 - z.getMin1()) + z.getMin2());
+            up2 -= min2;
             res.push_back(std::vector<T>(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++) {
                 if (i1 + min1 >= minord1 && i2 + min2 >= minord2) res[i1][i2] += data[i1 + min1 - minord1][i2 + min2 - minord2];
@@ -309,7 +349,12 @@ public:
         int up1 = std::min(n1 + minord1, z.getN1() + z.getMin1()) - min1;
         std::vector<std::vector<Q> > res;
         for (int i1 = 0; i1 < up1; i1++) {
-            int up2 = std::min(n2.at(i1) + minord2, z.getN2().at(i1) + z.getMin2()) - min2;
+            // the outer order i1 + min1 is at index i1 + min1 - minord1 in this expansion and i1 + min1 - z.getMin1()
+            // in z; an operand starting at a higher outer order is exactly zero here and does not limit the inner range
+            int up2 = std::numeric_limits<int>::max();
+            if (i1 + min1 >= minord1) up2 = std::min(up2, n2.at(i1 + min1 - minord1) + minord2);
+            if (i1 + min1 >= z.getMin1()) up2 = std::min(up2, z.getN2().at(i1 + min1 - z.getMin1()) + z.getMin2());
+            up2 -= min2;
             res.push_back(std::vector<Q>(up2, z.Zero()));
             for (int i2 = 0; i2 < up2; i2++) {
                 if (i1 + min1 >= minord1 && i2 + min2 >= minord2) res[i1][i2] += data[i1 + min1 - minord1][i2 + min2 - minord2];
@@ -641,7 +686,7 @@ public:
      * @return a new Expanded<T> with the truncated expansion.
      */
     Expanded<T> truncate(int n2max) {
-        if(n1 >= 1 || minord1 > 0)
+        if(n1 > 1 || minord1 > 0)
              throw std::runtime_error("Expanded::truncate(): wrong method, please use truncate(std::vector<int>, int)");
         return truncate(std::vector<int>(1, n2max), 0);
     }
@@ -655,13 +700,14 @@ public:
      * @return a instance of a class T containing the expansion summed to the requested orders.
      */
     T Series(std::vector<int> ord2, int ord1, double als2 = 1., double als1 = 1.) {
-        T res;
+        T res = Zero();
         if (ord1 >= minord1)
         {
-            for (int i = 0; i <= std::min(n1, ord1 - minord1); i++)
+            // stored orders only: i < n1 and j < n2.at(i)
+            for (int i = 0; i < std::min(n1, ord1 - minord1 + 1); i++)
                 {
                 if (ord2.at(i) >= minord2)
-                    for (int j = 0; j <= std::min(ord2.at(i) - minord2, n2.at(i)); j++)
+                    for (int j = 0; j < std::min(ord2.at(i) - minord2 + 1, n2.at(i)); j++)
                         res += data[i][j] * pow(als1, (double) (minord1 + i)) * pow(als2, (double) (minord2 + j));
                 }
         }

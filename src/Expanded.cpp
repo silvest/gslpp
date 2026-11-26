@@ -170,10 +170,14 @@ template <>
 Expanded<double> Expanded<double>::inverse() const
 {
     std::vector<std::vector<double> > res;
+    // invCoeff(i1, i2) needs the coefficients (j1, j2) with j1 <= i1, j2 <= i2: keep the inner range within the
+    // minimum of n2 over the lower outer orders (n2 may grow with the outer index)
+    int up2 = std::numeric_limits<int>::max();
     for (int i1 = 0; i1 < n1; i1++)
     {
-        res.push_back(std::vector<double> (n2.at(i1), 0.));
-        for (int i2 = 0; i2 < n2.at(i1); i2++)
+        up2 = std::min(up2, n2.at(i1));
+        res.push_back(std::vector<double> (up2, 0.));
+        for (int i2 = 0; i2 < up2; i2++)
             res[i1][i2] = invCoeff(i1, i2);
     }
     return Expanded<double>(res, -minord2, -minord1);
@@ -183,10 +187,14 @@ template <>
 Expanded<complex> Expanded<complex>::inverse() const
 {
     std::vector<std::vector<complex> > res;
+    // invCoeff(i1, i2) needs the coefficients (j1, j2) with j1 <= i1, j2 <= i2: keep the inner range within the
+    // minimum of n2 over the lower outer orders (n2 may grow with the outer index)
+    int up2 = std::numeric_limits<int>::max();
     for (int i1 = 0; i1 < n1; i1++)
     {
-        res.push_back(std::vector<complex> (n2.at(i1), 0.));
-        for (int i2 = 0; i2 < n2.at(i1); i2++)
+        up2 = std::min(up2, n2.at(i1));
+        res.push_back(std::vector<complex> (up2, 0.));
+        for (int i2 = 0; i2 < up2; i2++)
             res[i1][i2] = invCoeff(i1, i2);
     }
     return Expanded<complex>(res, -minord2, -minord1);
